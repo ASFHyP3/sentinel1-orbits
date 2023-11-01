@@ -57,9 +57,9 @@ def get_s3_orbits(bucket_name: str) -> set[str]:
     while True:
         response = s3.list_objects_v2(**params)
         objects.extend(response['Contents'])
-        if 'ContinuationToken' not in response:
+        if 'NextContinuationToken' not in response:
             break
-        params['StartAfter'] = response['ContinuationToken']
+        params['ContinuationToken'] = response['NextContinuationToken']
     return {os.path.basename(obj['Key']) for obj in objects}
 
 
@@ -101,11 +101,18 @@ def lambda_handler(event, context):
 
     response = secretsmanager.get_secret_value(SecretId=secret_arn)
     credentials = json.loads(response['SecretString'])
+
+    print('Getting S3 inventory')
     s3_orbits = get_s3_orbits(bucket_name=bucket_name)
+
+    print('Getting CDSE inventory')
     cdse_orbits = get_cdse_orbits()
+
+    orbits_to_copy = [orbit for orbit in cdse_orbits if orbit['filename'] not in s3_orbits]
+    print(f'Found {len(orbits_to_copy)} orbit files to fetch')
+
     with EsaToken(username=credentials['username'], password=credentials['password']) as token:
-        for orbit in cdse_orbits:
-            if orbit['filename'] not in s3_orbits:
-                print(f'Fetching {orbit["filename"]}')
-                copy_file(orbit['filename'], orbit['id'], token, bucket_name)
-                time.sleep(15)
+        for orbit in orbits_to_copy:
+            print(f'Fetching {orbit["filename"]}')
+            copy_file(orbit['filename'], orbit['id'], token, bucket_name)
+            time.sleep(15)
