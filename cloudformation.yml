@@ -19,6 +19,14 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref BucketName
+      LifecycleConfiguration:
+        Rules:
+          - Prefix: AUX_RESORB/
+            ExpirationInDays: 91
+            Status: Enabled
+          - Prefix: AUX_PREORB/
+            ExpirationInDays: 91
+            Status: Enabled
 
   # LogBucket
 
@@ -89,13 +97,32 @@ Resources:
       Qualifier: $LATEST
       MaximumRetryAttempts: 0
 
-  Schedule:
+  PoeorbSchedule:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: "rate(11 minutes)"
       Targets:
         - Arn: !GetAtt Lambda.Arn
           Id: lambda
+          Input: '{"orbit_type": "AUX_POEORB"}'
+
+  ResorbSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: "rate(11 minutes)"
+      Targets:
+        - Arn: !GetAtt Lambda.Arn
+          Id: lambda
+          Input: '{"orbit_type": "AUX_RESORB"}'
+
+  PreorbSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: "rate(11 minutes)"
+      Targets:
+        - Arn: !GetAtt Lambda.Arn
+          Id: lambda
+          Input: '{"orbit_type": "AUX_PREORB"}'
 
   EventPermission:
     Type: AWS::Lambda::Permission
@@ -103,4 +130,4 @@ Resources:
       FunctionName: !GetAtt Lambda.Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt Schedule.Arn
+      SourceArn: !Sub "arn:aws:events:${AWS::Region}:${AWS::AccountId}:rule/*"
