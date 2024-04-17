@@ -87,7 +87,7 @@ Resources:
       Handler: fetcher.lambda_handler
       MemorySize: 128
       Role: !GetAtt Role.Arn
-      Runtime: python3.11
+      Runtime: python3.12
       Timeout: 600
 
   EventInvokeConfig:
@@ -97,31 +97,19 @@ Resources:
       Qualifier: $LATEST
       MaximumRetryAttempts: 0
 
-  PoeorbSchedule:
+  Schedule:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: "rate(11 minutes)"
       Targets:
         - Arn: !GetAtt Lambda.Arn
-          Id: lambda
+          Id: AUX_POEORB
           Input: '{"orbit_type": "AUX_POEORB"}'
-
-  ResorbSchedule:
-    Type: AWS::Events::Rule
-    Properties:
-      ScheduleExpression: "rate(11 minutes)"
-      Targets:
         - Arn: !GetAtt Lambda.Arn
-          Id: lambda
+          Id: AUX_RESORB
           Input: '{"orbit_type": "AUX_RESORB"}'
-
-  PreorbSchedule:
-    Type: AWS::Events::Rule
-    Properties:
-      ScheduleExpression: "rate(11 minutes)"
-      Targets:
         - Arn: !GetAtt Lambda.Arn
-          Id: lambda
+          Id: AUX_PREORB
           Input: '{"orbit_type": "AUX_PREORB"}'
 
   EventPermission:
@@ -130,4 +118,4 @@ Resources:
       FunctionName: !GetAtt Lambda.Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
-      SourceArn: !Sub "arn:aws:events:${AWS::Region}:${AWS::AccountId}:rule/*"
+      SourceArn: !GetAtt Schedule.Arn
