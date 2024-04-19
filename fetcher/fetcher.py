@@ -74,7 +74,12 @@ def get_cdse_orbits(orbit_type) -> list[dict]:
     while items:
         response = session.get(url, params=params)
         response.raise_for_status()
-        items = [{'filename': feature['properties']['title'], 'id': feature['id']} for feature in response.json()['features']]
+        items = [
+            {
+                'filename': feature['properties']['title'],
+                'id': feature['id'],
+            } for feature in response.json()['features']
+        ]
         cdse_orbits.extend(items)
         params['page'] += 1
     return cdse_orbits
