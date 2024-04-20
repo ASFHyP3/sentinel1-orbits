@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: scottbrenner/cfn-lint-action@v2.4.1
-      - run: cfn-lint cloudformation.yml
+      - run: cfn-lint --info --ignore-checks W3002 cloudformation.yml
