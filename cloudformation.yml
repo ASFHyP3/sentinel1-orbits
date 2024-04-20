@@ -15,21 +15,6 @@ Parameters:
 
 Resources:
 
-  ArchiveBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref BucketName
-      LifecycleConfiguration:
-        Rules:
-          - Prefix: AUX_RESORB/
-            ExpirationInDays: 91
-            Status: Enabled
-          - Prefix: AUX_PREORB/
-            ExpirationInDays: 91
-            Status: Enabled
-
-  # LogBucket
-
   Secret:
     Type: AWS::SecretsManager::Secret
     Properties:
@@ -71,17 +56,17 @@ Resources:
             Resource: !Ref Secret
           - Effect: Allow
             Action: s3:ListBucket
-            Resource: !GetAtt ArchiveBucket.Arn
+            Resource: !Sub "arn:aws:s3:::${BucketName}"
           - Effect: Allow
             Action: s3:PutObject
-            Resource: !Sub "${ArchiveBucket.Arn}/*"
+            Resource: !Sub "arn:aws:s3:::${BucketName}/*"
 
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
       Environment:
         Variables:
-          BUCKET_NAME: !Ref ArchiveBucket
+          BUCKET_NAME: !Ref BucketName
           SECRET_ARN: !Ref Secret
       Code: fetcher/
       Handler: fetcher.lambda_handler
