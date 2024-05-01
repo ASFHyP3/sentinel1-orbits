@@ -1,8 +1,10 @@
 import os
+import re
 
 import boto3
 
 s3 = boto3.client('s3')
+
 
 def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
     platform = granule[0:3]
@@ -15,7 +17,7 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
         Prefix=f'{orbit_type}/{platform}',
     )
     for page in page_iterator:
-        for item in page['Contents']:
+        for item in page.get('Contents', []):
             filename = os.path.basename(item['Key'])
             start = filename[42:57]
             end = filename[58:73]
@@ -32,24 +34,34 @@ def get_url(granule, bucket):
     return None
 
 
+def is_s1_granule_name(granule: str) -> bool:
+    pattern = r'S1[AB]_(S[1-6]|IW|EW|WV)_(SLC_|GRD[FHM]|OCN_)_...._\d{8}T\d{6}_\d{8}T\d{6}_\d{6}_\d{6}_[A-F\d]{4}$'
+    return re.match(pattern, granule) is not None
+
+
 def lambda_handler(event, context):
     bucket = os.environ['BUCKET_NAME']
     granule = os.path.basename(event['rawPath'])
-    url = get_url(granule, bucket)
 
+    if not is_s1_granule_name(granule):
+        return {
+            'isBase64Encoded': False,
+            'statusCode': 400,
+            'body': f'{granule} is not a valid S1 granule name'
+        }
+
+    url = get_url(granule, bucket)
     if url:
-        response = {
+        return {
             'isBase64Encoded': False,
             'statusCode': 302,
             'headers': {
                 'location': url,
             }
         }
-    else:
-        response = {
-            'isBase64Encoded': False,
-            'statusCode': 404,
-            'body': f'No orbit file found for {granule}'
-        }
 
-    return response
+    return {
+        'isBase64Encoded': False,
+        'statusCode': 404,
+        'body': f'No orbit file found for {granule}'
+    }
