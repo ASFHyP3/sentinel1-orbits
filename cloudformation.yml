@@ -1,0 +1,30 @@
+Parameters:
+
+  BucketName:
+    Type: String
+
+  CdseUsername:
+    Type: String
+    NoEcho: true
+
+  CdsePassword:
+    Type: String
+    NoEcho: true
+
+Resources:
+
+  Api:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        BucketName: !Ref BucketName
+      TemplateURL: apps/api/cloudformation.yml
+
+  Fetcher:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        BucketName: !Ref BucketName
+        CdseUsername: !Ref CdseUsername
+        CdsePassword: !Ref CdsePassword
+      TemplateURL: apps/fetcher/cloudformation.yml
