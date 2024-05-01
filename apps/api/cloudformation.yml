@@ -12,6 +12,7 @@ Resources:
       ProtocolType: HTTP
       Target: !GetAtt Lambda.Arn
       CredentialsArn: !GetAtt ApiRole.Arn
+      BodyS3Location: openapi.yml
 
   ApiOverrides:
     Type: AWS::ApiGatewayV2::ApiGatewayManagedOverrides
