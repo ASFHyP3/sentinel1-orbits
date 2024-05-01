@@ -68,7 +68,7 @@ Resources:
         Variables:
           BUCKET_NAME: !Ref BucketName
           SECRET_ARN: !Ref Secret
-      Code: fetcher/
+      Code: src/
       Handler: fetcher.lambda_handler
       MemorySize: 128
       Role: !GetAtt Role.Arn
