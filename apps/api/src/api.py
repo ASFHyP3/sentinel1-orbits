@@ -34,7 +34,7 @@ def get_url(granule, bucket):
 
 def lambda_handler(event, context):
     bucket = os.environ['BUCKET_NAME']
-    granule = os.path.basename(event['rawpath'])
+    granule = os.path.basename(event['rawPath'])
     url = get_url(granule, bucket)
 
     if url:
