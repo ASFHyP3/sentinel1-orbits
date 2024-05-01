@@ -7,7 +7,6 @@ on:
 
 env:
   STACK_NAME: asj-sentinel1-orbits
-  AWS_REGION: us-west-2
   TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
   AWS_ACCESS_KEY_ID: ${{ secrets.V2_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.V2_AWS_SECRET_ACCESS_KEY }}
