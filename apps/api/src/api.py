@@ -18,7 +18,9 @@ def list_bucket(bucket: str, prefix: str) -> list[str]:
         Bucket=bucket,
         Prefix=prefix,
     )
-    return [item['Key'] for page in page_iterator for item in page.get('Contents', [])]
+    keys = [item['Key'] for page in page_iterator for item in page.get('Contents', [])]
+    keys.sort(reverse=True)
+    return keys
 
 
 def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
@@ -27,7 +29,6 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
     end_date = granule[33:48]
 
     keys = list_bucket(bucket, prefix=f'{orbit_type}/{platform}')
-    keys.sort(reverse=True)
     for key in keys:
         filename = os.path.basename(key)
         start = filename[42:57]
