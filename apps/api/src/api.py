@@ -50,7 +50,7 @@ def is_s1_granule_name(granule: str) -> bool:
     platform = r'S1[AB]'
     beam_mode = r'(S[1-6]|IW|EW|WV)'
     product_type = r'(SLC_|GRD[FHM]|OCN_|RAW_)'
-    date =r'\d{8}T\d{6}'
+    date = r'\d{8}T\d{6}'
     orbit = r'\d{6}'
     datatake_id = r'[A-F\d]{6}'
     unique_id = r'[A-F\d]{4}'
