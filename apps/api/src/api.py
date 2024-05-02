@@ -2,6 +2,7 @@ import os
 import re
 
 import boto3
+import cachetools
 
 s3 = boto3.client('s3')
 
@@ -10,6 +11,7 @@ def build_url(bucket: str, key: str) -> str:
     return f'https://{bucket}.s3.amazonaws.com/{key}'
 
 
+@cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=600))
 def list_bucket(bucket: str, prefix: str) -> list[str]:
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(
@@ -55,7 +57,7 @@ def is_s1_granule_name(granule: str) -> bool:
     return re.match(pattern, granule) is not None
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict, context: dict) -> dict:
     bucket = os.environ['BUCKET_NAME']
     granule = os.path.basename(event['rawPath'])
 
