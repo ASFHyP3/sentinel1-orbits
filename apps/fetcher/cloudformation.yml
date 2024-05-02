@@ -93,9 +93,6 @@ Resources:
         - Arn: !GetAtt Lambda.Arn
           Id: AUX_RESORB
           Input: '{"orbit_type": "AUX_RESORB"}'
-        - Arn: !GetAtt Lambda.Arn
-          Id: AUX_PREORB
-          Input: '{"orbit_type": "AUX_PREORB"}'
 
   EventPermission:
     Type: AWS::Lambda::Permission

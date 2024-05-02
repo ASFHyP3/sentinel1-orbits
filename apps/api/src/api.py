@@ -11,7 +11,7 @@ def build_url(bucket: str, key: str) -> str:
     return f'https://{bucket}.s3.amazonaws.com/{key}'
 
 
-@cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=600))
+@cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=60))
 def list_bucket(bucket: str, prefix: str) -> list[str]:
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(
@@ -39,7 +39,7 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
 
 
 def get_url(granule, bucket):
-    for orbit_type in ['AUX_POEORB', 'AUX_RESORB', 'AUX_PREORB']:
+    for orbit_type in ['AUX_POEORB', 'AUX_RESORB']:
         key = get_orbit_for_granule(granule, bucket, orbit_type)
         if key:
             return build_url(bucket, key)
