@@ -44,7 +44,14 @@ def get_url(granule, bucket):
 
 
 def is_s1_granule_name(granule: str) -> bool:
-    pattern = r'S1[AB]_(S[1-6]|IW|EW|WV)_(SLC_|GRD[FHM]|OCN_)_...._\d{8}T\d{6}_\d{8}T\d{6}_\d{6}_[A-F\d]{6}_[A-F\d]{4}$'
+    platform = r'S1[AB]'
+    beam_mode = r'(S[1-6]|IW|EW|WV)'
+    product_type = r'(SLC_|GRD[FHM]|OCN_|RAW_)'
+    date =r'\d{8}T\d{6}'
+    orbit = r'\d{6}'
+    datatake_id = r'[A-F\d]{6}'
+    unique_id = r'[A-F\d]{4}'
+    pattern = f'{platform}_{beam_mode}_{product_type}_...._{date}_{date}_{orbit}_{datatake_id}_{unique_id}$'
     return re.match(pattern, granule) is not None
 
 
