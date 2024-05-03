@@ -25,15 +25,15 @@ def list_bucket(bucket: str, prefix: str) -> list[str]:
 
 def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
     platform = granule[0:3]
-    start_date = granule[17:32]
-    end_date = granule[33:48]
+    granule_start_date = granule[17:32]
+    granule_end_date = granule[33:48]
 
     keys = list_bucket(bucket, prefix=f'{orbit_type}/{platform}')
     for key in keys:
         filename = os.path.basename(key)
-        start = filename[42:57]
-        end = filename[58:73]
-        if start <= start_date <= end_date <= end:
+        orbit_start_date = filename[42:57]
+        orbit_end_date = filename[58:73]
+        if orbit_start_date <= granule_start_date <= granule_end_date <= orbit_end_date:
             return key
     return None
 
