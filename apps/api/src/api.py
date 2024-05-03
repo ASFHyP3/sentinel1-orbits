@@ -50,11 +50,12 @@ def is_s1_granule_name(granule: str) -> bool:
     platform = r'S1[AB]'
     beam_mode = r'(S[1-6]|IW|EW|WV)'
     product_type = r'(SLC_|GRD[FHM]|OCN_|RAW_)'
+    details = r'[012]S[DSVH][VH]'
     date = r'\d{8}T\d{6}'
     orbit = r'\d{6}'
     datatake_id = r'[A-F\d]{6}'
     unique_id = r'[A-F\d]{4}'
-    pattern = f'{platform}_{beam_mode}_{product_type}_...._{date}_{date}_{orbit}_{datatake_id}_{unique_id}$'
+    pattern = f'{platform}_{beam_mode}_{product_type}_{details}_{date}_{date}_{orbit}_{datatake_id}_{unique_id}$'
     return re.match(pattern, granule) is not None
 
 
