@@ -1,8 +1,14 @@
 import os
-import re
 
 import boto3
 import cachetools
+
+from connexion import AsyncApp
+from mangum import Mangum
+
+app = AsyncApp(__name__)
+app.add_api('openapi.yml')
+lambda_handler = Mangum(app)
 
 s3 = boto3.client('s3')
 
@@ -46,42 +52,10 @@ def get_url(granule, bucket):
     return None
 
 
-def is_s1_granule_name(granule: str) -> bool:
-    platform = r'S1[AB]'
-    beam_mode = r'(S[1-6]|IW|EW|WV)'
-    product_type = r'(SLC_|GRD[FHM]|OCN_|RAW_)'
-    details = r'[012]S[DSVH][VH]'
-    date = r'\d{8}T\d{6}'
-    orbit = r'\d{6}'
-    datatake_id = r'[A-F\d]{6}'
-    unique_id = r'[A-F\d]{4}'
-    pattern = f'{platform}_{beam_mode}_{product_type}_{details}_{date}_{date}_{orbit}_{datatake_id}_{unique_id}$'
-    return re.match(pattern, granule) is not None
-
-
-def lambda_handler(event: dict, context: dict) -> dict:
+def get_orbit(scene: str):
     bucket = os.environ['BUCKET_NAME']
-    granule = os.path.basename(event['rawPath'])
-
-    if not is_s1_granule_name(granule):
-        return {
-            'isBase64Encoded': False,
-            'statusCode': 400,
-            'body': f'{granule} is not a valid S1 granule name'
-        }
-
-    url = get_url(granule, bucket)
+    url = get_url(scene, bucket)
     if url:
-        return {
-            'isBase64Encoded': False,
-            'statusCode': 302,
-            'headers': {
-                'location': url,
-            }
-        }
-
-    return {
-        'isBase64Encoded': False,
-        'statusCode': 404,
-        'body': f'No orbit file found for {granule}'
-    }
+        return None, 302, {'location': url}
+    else:
+        return f'No valid orbit file found for Sentinel-1 scene {scene}', 404

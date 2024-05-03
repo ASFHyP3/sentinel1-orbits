@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: Sentinel-1 Orbit API
+  version: 0.0.1
+paths:
+  /scene/{scene}:
+    get:
+      operationId: api.get_orbit
+      summary: Redirects to download the best available orbit file for a given Sentinel-1 scene
+      parameters:
+        - name: scene
+          in: path
+          description: Sentinel-1 scene name
+          required: true
+          schema:
+            type: string
+            pattern: 'S1[AB]_(S[1-6]|IW|EW|WV)_(SLC_|GRD[FHM]|OCN_|RAW_)_[012]S[DSVH][VH]_\d{8}T\d{6}_\d{8}T\d{6}_\d{6}_[A-F\d]{6}_[A-F\d]{4}'
+      responses:
+        '302':
+          description: Redirect to download an orbit file
+        '400':
+          description: Invalid Sentinel-1 scene name
+        '404':
+          description: No valid orbit file found for the given Sentinel-1 scene
+        default:
+          description: Unexpected error
