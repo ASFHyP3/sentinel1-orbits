@@ -140,3 +140,16 @@ def test_get_url():
             unittest.mock.call('myGranule', 'myBucket', 'AUX_POEORB'),
             unittest.mock.call('myGranule', 'myBucket', 'AUX_RESORB'),
         ])
+
+
+def test_get_orbit(monkeypatch):
+    monkeypatch.setenv('BUCKET_NAME', 'myBucket')
+
+    with unittest.mock.patch('api.get_url') as mock_get_url:
+        mock_get_url.return_value = None
+        assert api.get_orbit('foo') == ('No valid orbit file found for Sentinel-1 scene foo', 404)
+        mock_get_url.assert_called_once_with('foo', 'myBucket')
+
+    with unittest.mock.patch('api.get_url') as mock_get_url:
+        mock_get_url.return_value = 'https://foo.com/bar'
+        assert api.get_orbit('foo') == (None, 302, {'location': 'https://foo.com/bar'})
