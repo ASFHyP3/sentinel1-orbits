@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: install dependencies and render templates
+      - name: install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-api.txt -t apps/api/src

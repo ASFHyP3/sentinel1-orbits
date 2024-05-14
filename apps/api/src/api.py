@@ -2,7 +2,6 @@ import os
 
 import boto3
 import cachetools
-
 from connexion import AsyncApp
 from mangum import Mangum
 

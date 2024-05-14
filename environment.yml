@@ -5,6 +5,7 @@ channels:
 dependencies:
   - python=3.12
   - pip
+  - pytest
   - pip:
       - -r requirements-api.txt
       - -r requirements-fetcher.txt
