@@ -33,7 +33,7 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
     granule_start_date = granule[17:32]
     granule_end_date = granule[33:48]
 
-    keys = list_bucket(bucket, prefix=f'{orbit_type}/{platform}')
+    keys = list_bucket(bucket=bucket, prefix=f'{orbit_type}/{platform}')
     for key in keys:
         filename = os.path.basename(key)
         orbit_start_date = filename[42:57]
