@@ -14,5 +14,5 @@ jobs:
           environment-file: environment.yml
 
       - run: |
-          export PYTHONPATH=${PWD}/apps/api/src
+          export PYTHONPATH=${PWD}/apps/api/src:${PYTHONPATH}
           pytest tests
