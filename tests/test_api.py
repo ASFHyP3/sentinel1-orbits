@@ -40,35 +40,37 @@ def test_build_url():
 
 
 def test_list_bucket(s3_stubber):
-    expected_params = {
-        'Bucket': 'foo',
-        'Prefix': 'bar'
-    }
-    service_response = {
-        'Contents': [
-            {'Key': 'a'},
-            {'Key': 'e'},
-            {'Key': 'b'},
-        ],
-        'IsTruncated': True,
-        'NextContinuationToken': 'token',
-    }
-    s3_stubber.add_response(method='list_objects_v2', expected_params=expected_params,
-                            service_response=service_response)
+    s3_stubber.add_response(
+        method='list_objects_v2',
+        expected_params={
+            'Bucket': 'foo',
+            'Prefix': 'bar'
+        },
+        service_response={
+            'Contents': [
+                {'Key': 'a'},
+                {'Key': 'e'},
+                {'Key': 'b'},
+            ],
+            'IsTruncated': True,
+            'NextContinuationToken': 'token',
+        },
+    )
 
-    expected_params = {
-        'Bucket': 'foo',
-        'Prefix': 'bar',
-        'ContinuationToken': 'token',
-    }
-    service_response = {
-        'Contents': [
-            {'Key': 'c'},
-            {'Key': 'f'},
-        ],
-    }
-    s3_stubber.add_response(method='list_objects_v2', expected_params=expected_params,
-                            service_response=service_response)
+    s3_stubber.add_response(
+        method='list_objects_v2',
+        expected_params={
+            'Bucket': 'foo',
+            'Prefix': 'bar',
+            'ContinuationToken': 'token',
+        },
+        service_response={
+            'Contents': [
+                {'Key': 'c'},
+                {'Key': 'f'},
+            ],
+        },
+    )
 
     assert api.list_bucket('foo', 'bar') == ['f', 'e', 'c', 'b', 'a']
 
