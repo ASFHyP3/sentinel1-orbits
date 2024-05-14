@@ -13,6 +13,7 @@ jobs:
         with:
           environment-file: environment.yml
 
-      - run: |
-          export PYTHONPATH=${PWD}/apps/api/src:${PYTHONPATH}
+      - shell: bash -l {0}
+        run: |
+          export PYTHONPATH=${PWD}/apps/api/src
           pytest tests
