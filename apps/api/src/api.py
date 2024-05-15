@@ -28,7 +28,7 @@ def list_bucket(bucket: str, prefix: str) -> list[str]:
     return keys
 
 
-def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
+def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str) -> str | None:
     platform = granule[0:3]
     granule_start_date = granule[17:32]
     granule_end_date = granule[33:48]
@@ -43,7 +43,7 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str):
     return None
 
 
-def get_url(granule, bucket):
+def get_url(granule: str, bucket: str) -> str | None:
     for orbit_type in ['AUX_POEORB', 'AUX_RESORB']:
         key = get_orbit_for_granule(granule, bucket, orbit_type)
         if key:
