@@ -85,7 +85,7 @@ def test_list_bucket(s3_stubber):
 
     assert api.list_bucket('foo', 'bar') == ['f', 'e', 'c', 'b', 'a']
 
-    # test cached response is returned instead of making more requests to S3
+    # test cached response is returned without making more requests to S3
     assert api.list_bucket('foo', 'bar') == ['f', 'e', 'c', 'b', 'a']
 
 
