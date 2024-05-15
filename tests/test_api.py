@@ -35,6 +35,15 @@ def test_lambda_handler():
         'statusCode': 307
     }
 
+    event['requestContext']['http']['path'] = '/ui/'
+    assert api.lambda_handler(event, None)['statusCode'] == 200
+
+    event['requestContext']['http']['path'] = '/foo'
+    assert api.lambda_handler(event, None)['statusCode'] == 404
+
+    event['requestContext']['http']['path'] = '/scene/foo'
+    assert api.lambda_handler(event, None)['statusCode'] == 400
+
 
 def test_build_url():
     assert api.build_url('foo', 'bar') == 'https://foo.s3.amazonaws.com/bar'
