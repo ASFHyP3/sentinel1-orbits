@@ -1,6 +1,5 @@
-import responses
-
 import pytest
+import responses
 from botocore.stub import Stubber
 
 import fetcher
@@ -118,7 +117,7 @@ def test_get_cdse_orbits():
 
     responses.get(
         url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000,'page': 1})],
+        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 1})],
         json={
             'features': [
                 {'properties': {'title': 'title1'}, 'id': 'id1'},
@@ -129,7 +128,7 @@ def test_get_cdse_orbits():
 
     responses.get(
         url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000,'page': 2})],
+        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 2})],
         json={
             'features': [
                 {'properties': {'title': 'title3'}, 'id': 'id3'},
@@ -139,7 +138,7 @@ def test_get_cdse_orbits():
 
     responses.get(
         url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000,'page': 3})],
+        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 3})],
         json={
             'features': []
         },
