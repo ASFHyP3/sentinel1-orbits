@@ -16,4 +16,5 @@ jobs:
       - shell: bash -l {0}
         run: |
           export PYTHONPATH=${PWD}/apps/api/src:${PWD}/apps/fetcher/src
+          export AWS_DEFAULT_REGION=us-west-2
           pytest tests
