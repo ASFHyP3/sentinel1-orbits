@@ -12,6 +12,14 @@ Resources:
       ProtocolType: HTTP
       Target: !GetAtt Lambda.Arn
       CredentialsArn: !GetAtt ApiRole.Arn
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - HEAD
+          - GET
+        AllowHeaders:
+          - "*"
 
   ApiOverrides:
     Type: AWS::ApiGatewayV2::ApiGatewayManagedOverrides
