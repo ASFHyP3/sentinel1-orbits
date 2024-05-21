@@ -15,6 +15,7 @@ paths:
           schema:
             type: string
             pattern: 'S1[AB]_(S[1-6]|IW|EW|WV)_(SLC_|GRD[FHM]|OCN_|RAW_)_[012]S[DSVH][VH]_\d{8}T\d{6}_\d{8}T\d{6}_\d{6}_[A-F\d]{6}_[A-F\d]{4}'
+            example: S1B_IW_GRDH_1SDV_20211013T183321_20211013T183346_029121_037995_5B38
       responses:
         '302':
           description: Redirect to download an orbit file
