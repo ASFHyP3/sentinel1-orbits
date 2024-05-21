@@ -20,6 +20,7 @@ Resources:
           - GET
         AllowHeaders:
           - "*"
+        MaxAge: 3000
 
   ApiOverrides:
     Type: AWS::ApiGatewayV2::ApiGatewayManagedOverrides
