@@ -3,6 +3,12 @@ Parameters:
   BucketName:
     Type: String
 
+  CertificateArn:
+    Type: String
+
+  DomainName:
+    Type: String
+
   CdseUsername:
     Type: String
     NoEcho: true
@@ -18,6 +24,8 @@ Resources:
     Properties:
       Parameters:
         BucketName: !Ref BucketName
+        CertificateArn: !Ref CertificateArn
+        DomainName: !Ref DomainName
       TemplateURL: apps/api/cloudformation.yml
 
   Fetcher:
