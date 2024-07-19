@@ -61,7 +61,7 @@ def get_s3_orbits(bucket_name: str, prefix: str) -> set[str]:
     return {os.path.basename(obj['Key']) for obj in objects}
 
 
-def get_cdse_orbits(orbit_type) -> list[dict]:
+def get_cdse_orbits(orbit_type: str) -> list[dict]:
     url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel1/search.json'
     cdse_orbits = []
 
@@ -94,7 +94,7 @@ def copy_file(filename: str, file_id: str, token: str, bucket_name: str, orbit_t
     s3.put_object(Bucket=bucket_name, Key=f'{orbit_type}/{filename}', Body=response.text)
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict, context):
     secret_arn = os.environ['SECRET_ARN']
     bucket_name = os.environ['BUCKET_NAME']
     orbit_type = event['orbit_type']
