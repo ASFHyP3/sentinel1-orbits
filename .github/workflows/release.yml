@@ -11,4 +11,4 @@ jobs:
     with:
       release_prefix: Sentinel-1 Obrits
     secrets:
-      USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
+      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
