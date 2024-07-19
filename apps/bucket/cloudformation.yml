@@ -99,7 +99,9 @@ Resources:
       BucketName: !Ref DataSetName
       LoggingConfiguration:
         DestinationBucketName: !Ref LogBucket
-        LogFilePrefix: s3-access-logs/dataset-bucket/
+        TargetObjectKeyFormat:
+          PartitionedPrefix:
+            PartitionDateSource: EventTime
       MetricsConfigurations:
         - Id: EntireBucket
       LifecycleConfiguration:
