@@ -9,4 +9,4 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.0.1]
 
 ### Added
-* README, License, and GitHub Actions for conformance to ASF Standards.
+* Initial release of fetcher and api applications
