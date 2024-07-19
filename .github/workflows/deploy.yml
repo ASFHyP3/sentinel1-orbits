@@ -50,7 +50,7 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --parameter-overrides \
                 BucketName="${BUCKET_NAME}" \
-                DomainName="${DomainName}" \
-                CertificateArn="${CertificateArn}" \
+                DomainName="${DOMAIN_NAME}" \
+                CertificateArn="${CERTIFICATE_ARN}" \
                 CdseUsername="${CDSE_USERNAME}" \
                 CdsePassword="${CDSE_PASSWORD}"
