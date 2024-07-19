@@ -9,7 +9,7 @@ env:
   STACK_NAME: sentinel1-orbits
   TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
   CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-  BUCKET_NAME: sentinel1-orbits
+  BUCKET_NAME: asf-sentinel1-orbits
   CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
   DOMAIN_NAME: s1-orbits.asf.alaska.edu
   CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
