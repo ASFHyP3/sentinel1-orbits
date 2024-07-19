@@ -56,8 +56,8 @@ runs:
           --role-arn ${{ inputs.CLOUDFORMATION_ROLE_ARN }} \
           --capabilities CAPABILITY_IAM \
           --parameter-overrides \
-              BucketName="${{ inputs.BUCKET_NAME }}" \
-              DomainName="${{ inputs.DOMAIN_NAME }}" \
-              CertificateArn="${{ inputs.CERTIFICATE_ARN }}" \
-              CdseUsername="${{ inputs.CDSE_USERNAME }}" \
-              CdsePassword="${{ inputs.CDSE_PASSWORD }}"
+              BucketName='${{ inputs.BUCKET_NAME }}' \
+              DomainName='${{ inputs.DOMAIN_NAME }}' \
+              CertificateArn='${{ inputs.CERTIFICATE_ARN }}' \
+              CdseUsername='${{ inputs.CDSE_USERNAME }}' \
+              CdsePassword='${{ inputs.CDSE_PASSWORD }}'
