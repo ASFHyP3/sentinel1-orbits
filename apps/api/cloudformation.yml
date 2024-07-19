@@ -3,6 +3,12 @@ Parameters:
   BucketName:
     Type: String
 
+  DomainName:
+    Type: String
+
+  CertificateArn:
+    Type: String
+
 Resources:
 
   Api:
@@ -71,6 +77,21 @@ Resources:
     Properties:
       LogGroupName: !Sub "/aws/lambda/${Lambda}"
       RetentionInDays: 90
+
+  CustomDomainName:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: !Ref DomainName
+      DomainNameConfigurations:
+        - CertificateArn: !Ref CertificateArn
+          EndpointType: REGIONAL
+
+  ApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      ApiId: !Ref Api
+      DomainName: !Ref CustomDomainName
+      Stage: $default
 
   LambdaRole:
     Type: AWS::IAM::Role
