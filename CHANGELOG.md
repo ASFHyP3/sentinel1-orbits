@@ -10,6 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 * Automated creation of the S3 data bucket.
+* Automated deployment of separate test and production environments.
 
 ## [0.0.3]
 
