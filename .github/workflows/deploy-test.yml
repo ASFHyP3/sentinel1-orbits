@@ -26,6 +26,7 @@ jobs:
           TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
           STACK_NAME: s1-orbits-bucket-test
           BUCKET_NAME: s1-orbits-test
+          FETCHER_ROLE_NAME: orbits-fetcher-test
 
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy-application
@@ -40,4 +41,4 @@ jobs:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
           CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
-          ROLE_NAME: orbits-fetcher-test
+          FETCHER_ROLE_NAME: orbits-fetcher-test

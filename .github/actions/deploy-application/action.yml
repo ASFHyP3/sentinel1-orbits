@@ -22,7 +22,7 @@ inputs:
     required: true
   CDSE_PASSWORD:
     required: true
-  ROLE_NAME:
+  FETCHER_ROLE_NAME:
     required: true
 
 runs:
@@ -63,4 +63,4 @@ runs:
               CertificateArn='${{ inputs.CERTIFICATE_ARN }}' \
               CdseUsername='${{ inputs.CDSE_USERNAME }}' \
               CdsePassword='${{ inputs.CDSE_PASSWORD }}' \
-              RoleName='${{ inputs.ROLE_NAME }}'
+              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'

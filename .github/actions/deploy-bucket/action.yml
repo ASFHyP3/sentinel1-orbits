@@ -16,6 +16,8 @@ inputs:
     required: true
   BUCKET_NAME:
     required: true
+  FETCHER_ROLE_NAME:
+    required: true
 
 runs:
   using: composite
@@ -40,4 +42,5 @@ runs:
           --capabilities CAPABILITY_IAM \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
-              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}'
+              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}' \
+              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'

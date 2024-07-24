@@ -13,7 +13,7 @@ Parameters:
     Type: String
     NoEcho: true
 
-  RoleName:
+  FetcherRoleName:
     Type: String
 
 Resources:
@@ -42,7 +42,7 @@ Resources:
           Effect: Allow
       ManagedPolicyArns:
         - !Ref Policy
-      RoleName: !Ref RoleName
+      RoleName: !Ref FetcherRoleName
 
   Policy:
     Type: AWS::IAM::ManagedPolicy
