@@ -10,6 +10,9 @@ Parameters:
     MinLength: '1'
     Type: String
 
+  ApplicationAwsAccountId:
+    Type: String
+
 Resources:
   SNSTopic:
     Properties:
@@ -148,7 +151,9 @@ Resources:
           - s3:List*
           - s3:Get*
           Effect: Allow
-          Principal: "*"
+          Principal:
+            - "*"
+            - !Sub arn:aws:iam::${ApplicationAwsAccountId}:root
           Resource:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}
@@ -158,6 +163,9 @@ Outputs:
   DataBucket:
     Description: "S3 data bucket name"
     Value: !Sub ${DataSetBucket}
+  DataBucketArn:
+    Description: "S3 data bucket arn"
+    Value: !GetAtt DataSetBucket.Arn
   SNSTopic:
     Description: "SQS and Lambda subscribable SNS Topic"
     Value: !Ref SNSTopic

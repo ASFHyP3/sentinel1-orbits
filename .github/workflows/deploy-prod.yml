@@ -15,6 +15,17 @@ jobs:
       name: prod
 
     steps:
+
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy-bucket
+        with:
+          AWS_ACCESS_KEY_ID: ${{ secrets.OPENDATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+          CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
+          TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
+          STACK_NAME: s1-orbits-bucket
+          BUCKET_NAME: s1-orbits
+
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy
         with:
