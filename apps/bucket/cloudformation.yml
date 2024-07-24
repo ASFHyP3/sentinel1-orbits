@@ -166,4 +166,3 @@ Resources:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}
     Type: AWS::S3::BucketPolicy
-
