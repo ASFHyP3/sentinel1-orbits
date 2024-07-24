@@ -4,8 +4,37 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      FETCHER_ROLE_NAME:
+        type: string
+        description: The name to give to the IAM role that the fetcher uses.
+        default: orbits-fetcher
+      APPLICATION_STACK_NAME:
+        type: string
+        description: The name to give to the application stack.
+        default: s1-orbits
+      BUCKET_STACK_NAME:
+        type: string
+        description: The name to give to the bucket stack.
+        default: s1-orbits-bucket
+      BUCKET_NAME:
+        type: string
+        description: The name to give to the bucket.
+        default: s1-orbits     
+      DOMAIN_NAME:
+        type: string
+        description: The domain name for the API.
+        default: s1-orbits.asf.alaska.edu
 
 concurrency: deploy-prod
+
+env:
+  APP_STACK_NAME: ${{ github.event.inputs.APPLICATION_STACK_NAME || 's1-orbits' }}
+  BUCKET_STACK_NAME: ${{ github.event.inputs.BUCKET_STACK_NAME || 's1-orbits-bucket' }}
+  BUCKET_NAME: ${{ github.event.inputs.BUCKET_NAME || 's1-orbits' }}
+  DOMAIN_NAME: ${{ github.event.inputs.DOMAIN_NAME || 's1-orbits.asf.alaska.edu' }}
+  FETCHER_ROLE_NAME:  ${{ github.event.inputs.FETCHER_ROLE_NAME || 'orbits-fetcher' }}
 
 jobs:
   deploy:
@@ -15,7 +44,6 @@ jobs:
       name: prod
 
     steps:
-
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy-bucket
         with:
@@ -24,9 +52,9 @@ jobs:
           AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
           TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
-          STACK_NAME: s1-orbits-bucket
-          BUCKET_NAME: s1-orbits
-          FETCHER_ROLE_NAME: orbits-fetcher
+          STACK_NAME: ${{ env.BUCKET_STACK_NAME }}
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+          FETCHER_ROLE_NAME: ${{ env.FETCHER_ROLE_NAME }}
 
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy-application
@@ -35,10 +63,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
           TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
-          STACK_NAME: s1-orbits
-          BUCKET_NAME: s1-orbits
-          DOMAIN_NAME: s1-orbits.asf.alaska.edu
+          STACK_NAME: ${{ env.APP_STACK_NAME }}
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+          DOMAIN_NAME: ${{ env.DOMAIN_NAME }}
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
           CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
-          FETCHER_ROLE_NAME: orbits-fetcher
+          FETCHER_ROLE_NAME: ${{ env.FETCHER_ROLE_NAME }}
