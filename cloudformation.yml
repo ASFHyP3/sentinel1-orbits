@@ -19,18 +19,11 @@ Parameters:
 
 Resources:
 
-  Bucket:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        DataSetName: !Ref BucketName
-      TemplateURL: apps/bucket/cloudformation.yml
-
   Api:
     Type: AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        BucketName: !GetAtt Bucket.Outputs.DataBucket
+        BucketName: !Ref BucketName
         CertificateArn: !Ref CertificateArn
         DomainName: !Ref DomainName
       TemplateURL: apps/api/cloudformation.yml
@@ -39,7 +32,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        BucketName: !GetAtt Bucket.Outputs.DataBucket
+        BucketName: !Ref BucketName 
         CdseUsername: !Ref CdseUsername
         CdsePassword: !Ref CdsePassword
       TemplateURL: apps/fetcher/cloudformation.yml

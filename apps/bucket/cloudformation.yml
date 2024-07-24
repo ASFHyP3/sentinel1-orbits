@@ -1,10 +1,8 @@
-# adapted from https://s3-us-west-2.amazonaws.com/opendata.aws/pds-bucket-cf.yml
----
 AWSTemplateFormatVersion: '2010-09-09'
 Description: This template creates the AWS infrastructure to publish a public data set on S3. It creates a publicly-accessible S3 bucket for the dataset, enables CloudWatch Metrics for the dataset bucket, and creates a public SQS and Lambda subscribable SNS Topic.
 
 Parameters:
-  DataSetName:
+  BucketName:
     AllowedPattern: "[a-z0-9\\.\\-]*"
     ConstraintDescription: may only contain lowercase letters, numbers, and ., or - characters
     Description: "The name of the dataset's S3 bucket. This will be used to create the dataset S3 bucket."
@@ -15,7 +13,7 @@ Parameters:
 Resources:
   SNSTopic:
     Properties:
-      TopicName: !Join [ "", [ !Join [ "", !Split [ ".", !Ref DataSetName ] ], "-object_created" ] ]
+      TopicName: !Join [ "", [ !Join [ "", !Split [ ".", !Ref BucketName ] ], "-object_created" ] ]
     Type: AWS::SNS::Topic
 
   SNSTopicPolicy:
@@ -34,7 +32,7 @@ Resources:
             Service: s3.amazonaws.com
           Condition:
             ArnLike:
-              aws:SourceArn: !Sub arn:aws:s3:::${DataSetName}
+              aws:SourceArn: !Sub arn:aws:s3:::${BucketName}
         - Sid: allowOnlySQSandLambdaSubscription
           Effect: Allow
           Action:
@@ -96,7 +94,7 @@ Resources:
     DependsOn:
       - SNSTopicPolicy
     Properties:
-      BucketName: !Ref DataSetName
+      BucketName: !Ref BucketName
       LoggingConfiguration:
         DestinationBucketName: !Ref LogBucket
         TargetObjectKeyFormat:
