@@ -54,7 +54,7 @@ runs:
           --stack-name ${{ inputs.STACK_NAME }} \
           --template-file packaged.yml \
           --role-arn ${{ inputs.CLOUDFORMATION_ROLE_ARN }} \
-          --capabilities CAPABILITY_IAM \
+          --capabilities CAPABILITY_NAMED_IAM \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
               DomainName='${{ inputs.DOMAIN_NAME }}' \

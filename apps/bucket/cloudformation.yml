@@ -153,7 +153,7 @@ Resources:
           Effect: Allow
           Principal:
             - "*"
-            - !Sub arn:aws:iam::${AwsApplicationAccountId}:root
+            - !Sub arn:aws:iam::${AwsApplicationAccountId}:orbits
           Resource:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}

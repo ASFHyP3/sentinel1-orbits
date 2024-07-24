@@ -39,6 +39,7 @@ Resources:
           Effect: Allow
       ManagedPolicyArns:
         - !Ref Policy
+      RoleName: orbits
 
   Policy:
     Type: AWS::IAM::ManagedPolicy
