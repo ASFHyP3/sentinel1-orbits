@@ -159,13 +159,3 @@ Resources:
           - !Sub arn:aws:s3:::${DataSetBucket}
     Type: AWS::S3::BucketPolicy
 
-Outputs:
-  DataBucket:
-    Description: "S3 data bucket name"
-    Value: !Sub ${DataSetBucket}
-  DataBucketArn:
-    Description: "S3 data bucket arn"
-    Value: !GetAtt DataSetBucket.Arn
-  SNSTopic:
-    Description: "SQS and Lambda subscribable SNS Topic"
-    Value: !Ref SNSTopic
