@@ -22,6 +22,8 @@ inputs:
     required: true
   CDSE_PASSWORD:
     required: true
+  ROLE_NAME:
+    required: true
 
 runs:
   using: composite
@@ -60,4 +62,5 @@ runs:
               DomainName='${{ inputs.DOMAIN_NAME }}' \
               CertificateArn='${{ inputs.CERTIFICATE_ARN }}' \
               CdseUsername='${{ inputs.CDSE_USERNAME }}' \
-              CdsePassword='${{ inputs.CDSE_PASSWORD }}'
+              CdsePassword='${{ inputs.CDSE_PASSWORD }}' \
+              RoleName='${{ inputs.ROLE_NAME }}'

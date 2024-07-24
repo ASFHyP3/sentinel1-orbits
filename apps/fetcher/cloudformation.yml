@@ -13,6 +13,9 @@ Parameters:
     Type: String
     NoEcho: true
 
+  RoleName:
+    Type: String
+
 Resources:
 
   Secret:
@@ -39,7 +42,7 @@ Resources:
           Effect: Allow
       ManagedPolicyArns:
         - !Ref Policy
-      RoleName: orbits
+      RoleName: !Ref RoleName
 
   Policy:
     Type: AWS::IAM::ManagedPolicy

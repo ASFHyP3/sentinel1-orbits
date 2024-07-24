@@ -40,3 +40,4 @@ jobs:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
           CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
+          ROLE_NAME: orbits-fetcher
