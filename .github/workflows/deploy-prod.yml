@@ -21,6 +21,7 @@ jobs:
         with:
           AWS_ACCESS_KEY_ID: ${{ secrets.OPENDATA_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
           TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
           STACK_NAME: s1-orbits-bucket

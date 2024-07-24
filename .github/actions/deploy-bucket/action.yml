@@ -6,6 +6,8 @@ inputs:
     required: true
   AWS_SECRET_ACCESS_KEY:
     required: true
+  AWS_APPLICATION_ACCOUNT_ID:
+    required: true
   CLOUDFORMATION_ROLE_ARN:
     required: true
   TEMPLATE_BUCKET:
@@ -37,4 +39,5 @@ runs:
           --role-arn ${{ inputs.CLOUDFORMATION_ROLE_ARN }} \
           --capabilities CAPABILITY_IAM \
           --parameter-overrides \
-              BucketName='${{ inputs.BUCKET_NAME }}'
+              BucketName='${{ inputs.BUCKET_NAME }}' \
+              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}'
