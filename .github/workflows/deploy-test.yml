@@ -4,6 +4,28 @@ on:
   push:
     branches:
       - develop
+  workflow_dispatch:
+    inputs:
+      FETCHER_ROLE_NAME:
+        type: string
+        description: The name to give to the IAM role that the fetcher uses.
+        default: orbits-test-fetcher
+      APPLICATION_STACK_NAME:
+        type: string
+        description: The name to give to the application stack.
+        default: s1-orbits-test
+      BUCKET_STACK_NAME:
+        type: string
+        description: The name to give to the bucket stack.
+        default: s1-orbits-bucket-test
+      BUCKET_NAME:
+        type: string
+        description: The name to give to the bucket.
+        default: s1-orbits-test 
+      DOMAIN_NAME:
+        type: string
+        description: The domain name for the API.
+        default: s1-orbits-test.asf.alaska.edu
 
 concurrency: deploy-test
 
@@ -21,10 +43,17 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-          TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
-          STACK_NAME: s1-orbits-test
-          BUCKET_NAME: s1-orbits-test
-          DOMAIN_NAME: s1-orbits-test.asf.alaska.edu
+          OPENDATA_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          OPENDATA_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          OPENDATA_CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
+          AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
           CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
+          BUCKET_STACK_NAME: ${{ github.event.inputs.BUCKET_STACK_NAME || 's1-orbits-bucket-test' }}
+          APP_STACK_NAME: ${{ github.event.inputs.APPLICATION_STACK_NAME || 's1-orbits-test' }}
+          BUCKET_NAME: ${{ github.event.inputs.BUCKET_NAME || 's1-orbits-test' }}
+          DOMAIN_NAME: ${{ github.event.inputs.DOMAIN_NAME || 's1-orbits-test.asf.alaska.edu' }}
+          FETCHER_ROLE_NAME: ${{ github.event.inputs.FETCHER_ROLE_NAME || 'orbits-test-fetcher' }}
+          OPENDATA_TEMPLATE_BUCKET: cf-templates-aubvn3i9olmk-us-west-2
+          TEMPLATE_BUCKET: cf-templates-aubvn3i9olmk-us-west-2
