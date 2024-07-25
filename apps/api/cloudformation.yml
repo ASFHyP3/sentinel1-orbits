@@ -1,5 +1,7 @@
-Parameters:
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an API stack with a custom domain and lambda handler for retrieving s1 orbit files.
 
+Parameters:
   BucketName:
     Type: String
 
@@ -10,7 +12,6 @@ Parameters:
     Type: String
 
 Resources:
-
   Api:
     Type: AWS::ApiGatewayV2::Api
     Properties:

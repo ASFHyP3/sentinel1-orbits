@@ -1,5 +1,5 @@
 name: Deploy to AWS
-description: Deploys a copy of the application to AWS via CloudFormation
+description: Deploys the OpenData bucket stack, and the seperate application stack, to AWS via CloudFormation
 
 inputs:
   AWS_ACCESS_KEY_ID:
@@ -10,22 +10,59 @@ inputs:
     required: true
   TEMPLATE_BUCKET:
     required: true
-  STACK_NAME:
+  AWS_APPLICATION_ACCOUNT_ID:
+    required: true
+  OPENDATA_AWS_ACCESS_KEY_ID:
+    required: true
+  OPENDATA_AWS_SECRET_ACCESS_KEY:
+    required: true
+  OPENDATA_CLOUDFORMATION_ROLE_ARN:
+    required: true
+  OPENDATA_TEMPLATE_BUCKET:
+    required: true
+  CERTIFICATE_ARN:
+    required: true
+  APP_STACK_NAME:
+    required: true
+  BUCKET_STACK_NAME:
     required: true
   BUCKET_NAME:
     required: true
   DOMAIN_NAME:
     required: true
-  CERTIFICATE_ARN:
-    required: true
   CDSE_USERNAME:
     required: true
   CDSE_PASSWORD:
+    required: true
+  FETCHER_ROLE_NAME:
     required: true
 
 runs:
   using: composite
   steps:
+
+    - uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ inputs.OPENDATA_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ inputs.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+
+    - name: package and deploy the bucket stack
+      shell: bash
+      run: |
+        aws cloudformation package \
+          --template-file apps/bucket/cloudformation.yml \
+          --s3-bucket ${{ inputs.OPENDATA_TEMPLATE_BUCKET }} \
+          --output-template-file bucket_packaged.yml
+        aws cloudformation deploy \
+          --stack-name ${{ inputs.BUCKET_STACK_NAME }} \
+          --template-file bucket_packaged.yml \
+          --role-arn ${{ inputs.OPENDATA_CLOUDFORMATION_ROLE_ARN }} \
+          --parameter-overrides \
+              BucketName='${{ inputs.BUCKET_NAME }}' \
+              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}' \
+              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'
+
     - uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
@@ -43,21 +80,22 @@ runs:
         python -m pip install -r requirements-api.txt -t apps/api/src
         python -m pip install -r requirements-fetcher.txt -t apps/fetcher/src
 
-    - name: Package and deploy
+    - name: package and deploy the application stack
       shell: bash
       run: |
         aws cloudformation package \
           --template-file cloudformation.yml \
           --s3-bucket ${{ inputs.TEMPLATE_BUCKET }} \
-          --output-template-file packaged.yml
+          --output-template-file app_packaged.yml
         aws cloudformation deploy \
-          --stack-name ${{ inputs.STACK_NAME }} \
-          --template-file packaged.yml \
+          --stack-name ${{ inputs.APP_STACK_NAME }} \
+          --template-file app_packaged.yml \
           --role-arn ${{ inputs.CLOUDFORMATION_ROLE_ARN }} \
-          --capabilities CAPABILITY_IAM \
+          --capabilities CAPABILITY_NAMED_IAM \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
               DomainName='${{ inputs.DOMAIN_NAME }}' \
               CertificateArn='${{ inputs.CERTIFICATE_ARN }}' \
               CdseUsername='${{ inputs.CDSE_USERNAME }}' \
-              CdsePassword='${{ inputs.CDSE_PASSWORD }}'
+              CdsePassword='${{ inputs.CDSE_PASSWORD }}' \
+              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'
