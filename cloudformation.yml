@@ -1,5 +1,7 @@
-Parameters:
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates the API and Fetcher stacks
 
+Parameters:
   BucketName:
     Type: String
 
@@ -18,7 +20,6 @@ Parameters:
     NoEcho: true
 
 Resources:
-
   Api:
     Type: AWS::CloudFormation::Stack
     Properties:
