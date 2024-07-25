@@ -161,6 +161,6 @@ Resources:
         Statement:
         - Action: s3:PutObject
           Effect: Allow
-          Principal: !Sub arn:aws:iam::${AwsApplicationAccountId}:${FetcherRoleName}
+          Principal: !Sub arn:aws:iam::${AwsApplicationAccountId}:role/${FetcherRoleName}
           Resource: !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy
