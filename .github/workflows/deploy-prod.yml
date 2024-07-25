@@ -55,5 +55,5 @@ jobs:
           BUCKET_NAME: ${{ github.event.inputs.BUCKET_NAME || 's1-orbits' }}
           DOMAIN_NAME: ${{ github.event.inputs.DOMAIN_NAME || 's1-orbits.asf.alaska.edu' }}
           FETCHER_ROLE_NAME: ${{ github.event.inputs.FETCHER_ROLE_NAME || 'orbits-fetcher' }}
-          OPENDATA_TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
+          OPENDATA_TEMPLATE_BUCKET: cf-templates-250jrbt1c7xh-us-west-2
           TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
