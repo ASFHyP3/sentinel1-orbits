@@ -58,7 +58,6 @@ runs:
           --stack-name ${{ inputs.BUCKET_STACK_NAME }} \
           --template-file bucket_packaged.yml \
           --role-arn ${{ inputs.OPENDATA_CLOUDFORMATION_ROLE_ARN }} \
-          --capabilities CAPABILITY_IAM \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
               AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}' \
