@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: This template creates the AWS infrastructure to publish a public data set on S3. It creates a publicly-accessible S3 bucket for the dataset, enables CloudWatch Metrics for the dataset bucket, and creates a public SQS and Lambda subscribable SNS Topic.
+Description: Creates a publicly-accessible OpenData S3 bucket for s1-orbits, with Cloudwatch metrics, as well as a public SQS and Lambda subscribable SNS Topic.
 
 Parameters:
   BucketName:
@@ -154,8 +154,7 @@ Resources:
           - s3:List*
           - s3:Get*
           Effect: Allow
-          Principal:
-            - "*"
+          Principal: "*"
           Resource:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}
