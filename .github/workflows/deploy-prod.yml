@@ -29,13 +29,6 @@ on:
 
 concurrency: deploy-prod
 
-env:
-  APP_STACK_NAME: ${{ github.event.inputs.APPLICATION_STACK_NAME || 's1-orbits' }}
-  BUCKET_STACK_NAME: ${{ github.event.inputs.BUCKET_STACK_NAME || 's1-orbits-bucket' }}
-  BUCKET_NAME: ${{ github.event.inputs.BUCKET_NAME || 's1-orbits' }}
-  DOMAIN_NAME: ${{ github.event.inputs.DOMAIN_NAME || 's1-orbits.asf.alaska.edu' }}
-  FETCHER_ROLE_NAME:  ${{ github.event.inputs.FETCHER_ROLE_NAME || 'orbits-fetcher' }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -45,28 +38,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/deploy-bucket
-        with:
-          AWS_ACCESS_KEY_ID: ${{ secrets.OPENDATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.OPENDATA_AWS_SECRET_ACCESS_KEY }}
-          AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
-          CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
-          TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
-          STACK_NAME: ${{ env.BUCKET_STACK_NAME }}
-          BUCKET_NAME: ${{ env.BUCKET_NAME }}
-          FETCHER_ROLE_NAME: ${{ env.FETCHER_ROLE_NAME }}
-
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/deploy-application
+      - uses: ./.github/actions/deploy
         with:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-          TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
-          STACK_NAME: ${{ env.APP_STACK_NAME }}
-          BUCKET_NAME: ${{ env.BUCKET_NAME }}
-          DOMAIN_NAME: ${{ env.DOMAIN_NAME }}
+          OPENDATA_AWS_ACCESS_KEY_ID: ${{ secrets.OPENDATA_AWS_ACCESS_KEY_ID }}
+          OPENDATA_AWS_SECRET_ACCESS_KEY: ${{ secrets.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+          OPENDATA_CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
+          OPENDATA_AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           CDSE_USERNAME: ${{ secrets.CDSE_USERNAME }}
           CDSE_PASSWORD: ${{ secrets.CDSE_PASSWORD }}
-          FETCHER_ROLE_NAME: ${{ env.FETCHER_ROLE_NAME }}
+          BUCKET_STACK_NAME: ${{ github.event.inputs.BUCKET_STACK_NAME || 's1-orbits-bucket' }}
+          APP_STACK_NAME: ${{ github.event.inputs.APPLICATION_STACK_NAME || 's1-orbits' }}
+          BUCKET_NAME: ${{ github.event.inputs.BUCKET_NAME || 's1-orbits' }}
+          DOMAIN_NAME: ${{ github.event.inputs.DOMAIN_NAME || 's1-orbits.asf.alaska.edu' }}
+          FETCHER_ROLE_NAME: ${{ github.event.inputs.FETCHER_ROLE_NAME || 'orbits-fetcher' }}
+          OPENDATA_TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
+          TEMPLATE_BUCKET: cf-templates-1hz9ldhhl4ahu-us-west-2
