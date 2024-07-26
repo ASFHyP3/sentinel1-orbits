@@ -13,9 +13,6 @@ Parameters:
   AwsApplicationAccountId:
     Type: String
 
-  FetcherRoleName:
-    Type: String
-
 Resources:
   SNSTopic:
     Properties:
@@ -81,7 +78,7 @@ Resources:
     Properties:
       Bucket: !Ref LogBucket
       PolicyDocument:
-        Version: 2012-10-17
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
@@ -161,6 +158,7 @@ Resources:
         Statement:
         - Action: s3:PutObject
           Effect: Allow
-          Principal: !Sub arn:aws:iam::${AwsApplicationAccountId}:role/${FetcherRoleName}
+          Principal:
+            AWS: !Ref AwsApplicationAccountId
           Resource: !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy

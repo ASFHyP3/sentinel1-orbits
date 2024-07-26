@@ -13,9 +13,6 @@ Parameters:
     Type: String
     NoEcho: true
 
-  FetcherRoleName:
-    Type: String
-
 Resources:
   Secret:
     Type: AWS::SecretsManager::Secret
@@ -41,7 +38,6 @@ Resources:
           Effect: Allow
       ManagedPolicyArns:
         - !Ref Policy
-      RoleName: !Ref FetcherRoleName
 
   Policy:
     Type: AWS::IAM::ManagedPolicy
