@@ -34,8 +34,6 @@ inputs:
     required: true
   CDSE_PASSWORD:
     required: true
-  FETCHER_ROLE_NAME:
-    required: true
 
 runs:
   using: composite
@@ -60,8 +58,7 @@ runs:
           --role-arn ${{ inputs.OPENDATA_CLOUDFORMATION_ROLE_ARN }} \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
-              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}' \
-              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'
+              AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}'
 
     - uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -91,11 +88,10 @@ runs:
           --stack-name ${{ inputs.APP_STACK_NAME }} \
           --template-file app_packaged.yml \
           --role-arn ${{ inputs.CLOUDFORMATION_ROLE_ARN }} \
-          --capabilities CAPABILITY_NAMED_IAM \
+          --capabilities CAPABILITY_IAM \
           --parameter-overrides \
               BucketName='${{ inputs.BUCKET_NAME }}' \
               DomainName='${{ inputs.DOMAIN_NAME }}' \
               CertificateArn='${{ inputs.CERTIFICATE_ARN }}' \
               CdseUsername='${{ inputs.CDSE_USERNAME }}' \
-              CdsePassword='${{ inputs.CDSE_PASSWORD }}' \
-              FetcherRoleName='${{ inputs.FETCHER_ROLE_NAME }}'
+              CdsePassword='${{ inputs.CDSE_PASSWORD }}'

@@ -13,9 +13,6 @@ Parameters:
   AwsApplicationAccountId:
     Type: String
 
-  FetcherRoleName:
-    Type: String
-
 Resources:
   SNSTopic:
     Properties:
@@ -162,6 +159,6 @@ Resources:
         - Action: s3:PutObject
           Effect: Allow
           Principal:
-            AWS: !Sub arn:aws:iam::${AwsApplicationAccountId}:role/${FetcherRoleName}
+            AWS: !Sub arn:aws:iam::${AwsApplicationAccountId}:root
           Resource: !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy
