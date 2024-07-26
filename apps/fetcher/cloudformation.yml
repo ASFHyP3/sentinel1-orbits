@@ -1,7 +1,7 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates a lambda handler capable of pushing new s1 orbit data to the OpenData bucket every 11 minutes.
 
 Parameters:
-
   BucketName:
     Type: String
 
@@ -14,7 +14,6 @@ Parameters:
     NoEcho: true
 
 Resources:
-
   Secret:
     Type: AWS::SecretsManager::Secret
     Properties:

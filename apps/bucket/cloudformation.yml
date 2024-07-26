@@ -1,10 +1,8 @@
-# adapted from https://s3-us-west-2.amazonaws.com/opendata.aws/pds-bucket-cf.yml
----
 AWSTemplateFormatVersion: '2010-09-09'
-Description: This template creates the AWS infrastructure to publish a public data set on S3. It creates a publicly-accessible S3 bucket for the dataset, enables CloudWatch Metrics for the dataset bucket, and creates a public SQS and Lambda subscribable SNS Topic.
+Description: Creates a publicly-accessible OpenData S3 bucket for s1-orbits, with Cloudwatch metrics, as well as a public SQS and Lambda subscribable SNS Topic.
 
 Parameters:
-  DataSetName:
+  BucketName:
     AllowedPattern: "[a-z0-9\\.\\-]*"
     ConstraintDescription: may only contain lowercase letters, numbers, and ., or - characters
     Description: "The name of the dataset's S3 bucket. This will be used to create the dataset S3 bucket."
@@ -12,10 +10,13 @@ Parameters:
     MinLength: '1'
     Type: String
 
+  AwsApplicationAccountId:
+    Type: String
+
 Resources:
   SNSTopic:
     Properties:
-      TopicName: !Join [ "", [ !Join [ "", !Split [ ".", !Ref DataSetName ] ], "-object_created" ] ]
+      TopicName: !Join [ "", [ !Join [ "", !Split [ ".", !Ref BucketName ] ], "-object_created" ] ]
     Type: AWS::SNS::Topic
 
   SNSTopicPolicy:
@@ -34,7 +35,7 @@ Resources:
             Service: s3.amazonaws.com
           Condition:
             ArnLike:
-              aws:SourceArn: !Sub arn:aws:s3:::${DataSetName}
+              aws:SourceArn: !Sub arn:aws:s3:::${BucketName}
         - Sid: allowOnlySQSandLambdaSubscription
           Effect: Allow
           Action:
@@ -77,7 +78,7 @@ Resources:
     Properties:
       Bucket: !Ref LogBucket
       PolicyDocument:
-        Version: 2012-10-17
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
@@ -96,7 +97,7 @@ Resources:
     DependsOn:
       - SNSTopicPolicy
     Properties:
-      BucketName: !Ref DataSetName
+      BucketName: !Ref BucketName
       LoggingConfiguration:
         DestinationBucketName: !Ref LogBucket
         TargetObjectKeyFormat:
@@ -154,12 +155,10 @@ Resources:
           Resource:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}
+        Statement:
+        - Action: s3:PutObject
+          Effect: Allow
+          Principal:
+            AWS: !Ref AwsApplicationAccountId
+          Resource: !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy
-
-Outputs:
-  DataBucket:
-    Description: "S3 data bucket name"
-    Value: !Sub ${DataSetBucket}
-  SNSTopic:
-    Description: "SQS and Lambda subscribable SNS Topic"
-    Value: !Ref SNSTopic
