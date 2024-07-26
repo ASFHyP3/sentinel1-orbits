@@ -159,6 +159,6 @@ Resources:
         - Action: s3:PutObject
           Effect: Allow
           Principal:
-            AWS: !Sub arn:aws:iam::${AwsApplicationAccountId}:root
+            AWS: !Ref AwsApplicationAccountId
           Resource: !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy
