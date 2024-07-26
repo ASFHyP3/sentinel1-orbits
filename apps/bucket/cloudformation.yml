@@ -155,7 +155,6 @@ Resources:
           Resource:
           - !Sub arn:aws:s3:::${DataSetBucket}/*
           - !Sub arn:aws:s3:::${DataSetBucket}
-        Statement:
         - Action: s3:PutObject
           Effect: Allow
           Principal:
