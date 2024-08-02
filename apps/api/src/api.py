@@ -3,6 +3,8 @@ import os
 import boto3
 import cachetools
 from connexion import AsyncApp
+from connexion.lifecycle import ConnexionRequest, ConnexionResponse
+
 from mangum import Mangum
 
 app = AsyncApp(__name__)
@@ -16,7 +18,7 @@ def build_url(bucket: str, key: str) -> str:
     return f'https://{bucket}.s3.amazonaws.com/{key}'
 
 
-@cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=60))
+# @cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=60))
 def list_bucket(bucket: str, prefix: str) -> list[str]:
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(
@@ -43,17 +45,22 @@ def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str) -> str | N
     return None
 
 
-def get_url(granule: str, bucket: str) -> str | None:
-    for orbit_type in ['AUX_POEORB', 'AUX_RESORB']:
+def get_url(granule: str, bucket: str, orbit_type: str = '') -> str | None:
+    if orbit_type:
         key = get_orbit_for_granule(granule, bucket, orbit_type)
         if key:
             return build_url(bucket, key)
+    else:
+        for orbit_type in ['AUX_POEORB', 'AUX_RESORB']:
+            key = get_orbit_for_granule(granule, bucket, orbit_type)
+            if key:
+                return build_url(bucket, key)
     return None
 
 
-def get_orbit(scene: str):
+def get_orbit(scene: str, orbit_type: str =''):
     bucket = os.environ['BUCKET_NAME']
-    url = get_url(scene, bucket)
+    url = get_url(scene, bucket, orbit_type=orbit_type)
     if url:
         return None, 302, {'location': url}
     else:
