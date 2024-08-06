@@ -18,7 +18,7 @@ def build_url(bucket: str, key: str) -> str:
     return f'https://{bucket}.s3.amazonaws.com/{key}'
 
 
-# @cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=60))
+@cachetools.cached(cache=cachetools.TTLCache(maxsize=10, ttl=60))
 def list_bucket(bucket: str, prefix: str) -> list[str]:
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(
@@ -58,7 +58,7 @@ def get_url(granule: str, bucket: str, orbit_type: str = '') -> str | None:
     return None
 
 
-def get_orbit(scene: str, orbit_type: str =''):
+def get_orbit(scene: str, orbit_type: str = ''):
     bucket = os.environ['BUCKET_NAME']
     url = get_url(scene, bucket, orbit_type=orbit_type)
     if url:
