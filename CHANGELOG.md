@@ -9,7 +9,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.2]
 
 ### Changed
-* Date range used to find best orbit file to be ascending node crossing time inclusive.
+* Date range used to find best orbit file to include the ascending node crossing time.
 
 ## [0.1.1]
 
