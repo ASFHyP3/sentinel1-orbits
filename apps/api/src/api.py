@@ -1,9 +1,12 @@
 import os
+from datetime import datetime, timedelta
+from typing import Tuple
 
 import boto3
 import cachetools
 from connexion import AsyncApp
 from mangum import Mangum
+
 
 app = AsyncApp(__name__)
 app.add_api('openapi.yml')
@@ -28,10 +31,27 @@ def list_bucket(bucket: str, prefix: str) -> list[str]:
     return keys
 
 
+def get_anx_inclusive_time_range(granule_start_date: str, granule_end_date: str) -> Tuple[str, str]:
+    # Orbital period of Sentinel-1 in seconds:
+    # 12 days * 86400.0 seconds/day, divided into 175 orbits
+    padding_next_minute_int = 60
+    t_orbit_int = round((12 * 86400.0) / 175.0)
+
+    # Temporal margin to apply to the start time of a frame
+    # to make sure that the ascending node crossing is
+    # included when choosing the orbit file.
+    padding_next_minute = timedelta(seconds=padding_next_minute_int)
+    margin_start_time = timedelta(seconds=t_orbit_int + padding_next_minute_int)
+
+    dt_fmt = '%Y%m%dT%H%M%S'
+    granule_start_date = datetime.strftime(datetime.strptime(granule_start_date, dt_fmt) - margin_start_time, dt_fmt)
+    granule_end_date = datetime.strftime(datetime.strptime(granule_end_date, dt_fmt) + padding_next_minute, dt_fmt)
+    return granule_start_date, granule_end_date
+
+
 def get_orbit_for_granule(granule: str, bucket: str, orbit_type: str) -> str | None:
     platform = granule[0:3]
-    granule_start_date = granule[17:32]
-    granule_end_date = granule[33:48]
+    granule_start_date, granule_end_date = get_anx_inclusive_time_range(granule[17:32], granule[33:48])
 
     keys = list_bucket(bucket=bucket, prefix=f'{orbit_type}/{platform}')
     for key in keys:

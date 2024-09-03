@@ -89,6 +89,14 @@ def test_list_bucket(s3_stubber):
     assert api.list_bucket('foo', 'bar') == ['f', 'e', 'c', 'b', 'a']
 
 
+def test_get_anx_inclusive_time_range():
+    start, end = api.get_anx_inclusive_time_range('20240101T000000', '20240102T000000')
+    assert isinstance(start, str)
+    assert start == '20231231T222015'
+    assert isinstance(end, str)
+    assert end == '20240102T000100'
+
+
 def test_get_orbit_for_granule():
     with unittest.mock.patch('api.list_bucket') as mock_list_bucket:
         mock_list_bucket.return_value = [
