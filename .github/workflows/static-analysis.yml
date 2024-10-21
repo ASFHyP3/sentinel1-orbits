@@ -4,10 +4,10 @@ on: push
 
 jobs:
   secrets:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.11.2
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.12.0
 
   flake8:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.11.2
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.12.0
     with:
       local_package_names: fetcher,api
 
