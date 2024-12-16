@@ -6,6 +6,7 @@ dependencies:
   - python=3.12
   - pip
   - pytest
+  - ruff
   - responses
   - pip:
       - -r requirements-api.txt
