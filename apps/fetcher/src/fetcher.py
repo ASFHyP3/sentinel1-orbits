@@ -78,7 +78,8 @@ def get_cdse_orbits(orbit_type: str) -> list[dict]:
             {
                 'filename': feature['properties']['title'],
                 'id': feature['id'],
-            } for feature in response.json()['features']
+            }
+            for feature in response.json()['features']
         ]
         cdse_orbits.extend(items)
         params['page'] += 1

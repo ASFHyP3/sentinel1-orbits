@@ -48,10 +48,7 @@ def test_esa_token():
 def test_get_s3_orbits(s3_stubber):
     s3_stubber.add_response(
         method='list_objects_v2',
-        expected_params={
-            'Bucket': 'foo',
-            'Prefix': 'bar'
-        },
+        expected_params={'Bucket': 'foo', 'Prefix': 'bar'},
         service_response={
             'Contents': [
                 {'Key': 'bar/a'},
@@ -139,9 +136,7 @@ def test_get_cdse_orbits():
     responses.get(
         url=url,
         match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 3})],
-        json={
-            'features': []
-        },
+        json={'features': []},
     )
 
     assert fetcher.get_cdse_orbits('AUX_RESORB') == [
