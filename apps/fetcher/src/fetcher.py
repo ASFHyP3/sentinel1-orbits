@@ -4,6 +4,7 @@ import os
 import boto3
 import requests
 
+
 ESA_CREATE_TOKEN_URL = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
 ESA_DELETE_TOKEN_URL = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/account/sessions'
 
@@ -17,10 +18,9 @@ class EsaToken:
     """Context manager for authentication tokens for the ESA Copernicus Data Space Ecosystem (CDSE)"""
 
     def __init__(self, username: str, password: str):
-        """
-        Args:
-            username: CDSE username
-            password: CDSE password
+        """Args:
+        username: CDSE username
+        password: CDSE password
         """
         self.username = username
         self.password = password
@@ -78,7 +78,8 @@ def get_cdse_orbits(orbit_type: str) -> list[dict]:
             {
                 'filename': feature['properties']['title'],
                 'id': feature['id'],
-            } for feature in response.json()['features']
+            }
+            for feature in response.json()['features']
         ]
         cdse_orbits.extend(items)
         params['page'] += 1

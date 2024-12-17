@@ -15,24 +15,20 @@ def s3_stubber():
 
 def test_lambda_handler():
     event = {
-      'version': '2.0',
-      'requestContext': {
-        'http': {
-          'method': 'GET',
-          'path': '/ui',
-          'sourceIp': '127.0.0.1',
+        'version': '2.0',
+        'requestContext': {
+            'http': {
+                'method': 'GET',
+                'path': '/ui',
+                'sourceIp': '127.0.0.1',
+            },
         },
-      },
     }
     assert api.lambda_handler(event, None) == {
         'body': '',
-        'headers': {
-            'content-length': '0',
-            'content-type': 'application/json',
-            'location': '/ui/'
-        },
+        'headers': {'content-length': '0', 'content-type': 'application/json', 'location': '/ui/'},
         'isBase64Encoded': False,
-        'statusCode': 307
+        'statusCode': 307,
     }
 
     event['requestContext']['http']['path'] = '/ui/'
@@ -53,10 +49,7 @@ def test_build_url():
 def test_list_bucket(s3_stubber):
     s3_stubber.add_response(
         method='list_objects_v2',
-        expected_params={
-            'Bucket': 'foo',
-            'Prefix': 'bar'
-        },
+        expected_params={'Bucket': 'foo', 'Prefix': 'bar'},
         service_response={
             'Contents': [
                 {'Key': 'a'},
@@ -94,22 +87,28 @@ def test_get_orbit_for_granule():
         mock_list_bucket.return_value = [
             'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230604T080854_V20230514T225942_20230516T005942.EOF',
         ]
-        assert api.get_orbit_for_granule(
-            granule='S1A_IW_GRDH_1SDV_20230515T075514_20230515T075542_048541_05D6B8_579B',
-            bucket='myBucket',
-            orbit_type='myOrbitType',
-        ) == 'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230604T080854_V20230514T225942_20230516T005942.EOF'
+        assert (
+            api.get_orbit_for_granule(
+                granule='S1A_IW_GRDH_1SDV_20230515T075514_20230515T075542_048541_05D6B8_579B',
+                bucket='myBucket',
+                orbit_type='myOrbitType',
+            )
+            == 'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230604T080854_V20230514T225942_20230516T005942.EOF'
+        )
         mock_list_bucket.assert_called_once_with(bucket='myBucket', prefix='myOrbitType/S1A')
 
     with unittest.mock.patch('api.list_bucket') as mock_list_bucket:
         mock_list_bucket.return_value = [
             'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230604T080854_V20230514T225942_20230516T005942.EOF',
         ]
-        assert api.get_orbit_for_granule(
-            granule='S1A_IW_GRDH_1SDV_20240515T075514_20240515T075542_048541_05D6B8_579B',
-            bucket='myBucket',
-            orbit_type='myOrbitType',
-        ) is None
+        assert (
+            api.get_orbit_for_granule(
+                granule='S1A_IW_GRDH_1SDV_20240515T075514_20240515T075542_048541_05D6B8_579B',
+                bucket='myBucket',
+                orbit_type='myOrbitType',
+            )
+            is None
+        )
         mock_list_bucket.assert_called_once_with(bucket='myBucket', prefix='myOrbitType/S1A')
 
     with unittest.mock.patch('api.list_bucket') as mock_list_bucket:
@@ -118,11 +117,14 @@ def test_get_orbit_for_granule():
             'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230605T080854_V20240514T225942_20240516T005942.EOF',
             'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230604T080854_V20240514T225942_20240516T005942.EOF',
         ]
-        assert api.get_orbit_for_granule(
-            granule='S1A_IW_GRDH_1SDV_20240515T075514_20240515T075542_048541_05D6B8_579B',
-            bucket='myBucket',
-            orbit_type='myOrbitType',
-        ) == 'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230606T080854_V20240514T225942_20240516T005942.EOF'
+        assert (
+            api.get_orbit_for_granule(
+                granule='S1A_IW_GRDH_1SDV_20240515T075514_20240515T075542_048541_05D6B8_579B',
+                bucket='myBucket',
+                orbit_type='myOrbitType',
+            )
+            == 'AUX_POEORB/S1A_OPER_AUX_POEORB_OPOD_20230606T080854_V20240514T225942_20240516T005942.EOF'
+        )
         mock_list_bucket.assert_called_once_with(bucket='myBucket', prefix='myOrbitType/S1A')
 
 
@@ -131,10 +133,12 @@ def test_get_url():
         mock_get_orbit_for_granule.return_value = None
         assert api.get_url(granule='myGranule', bucket='myBucket') is None
         assert mock_get_orbit_for_granule.call_count == 2
-        mock_get_orbit_for_granule.assert_has_calls([
-            unittest.mock.call('myGranule', 'myBucket', 'AUX_POEORB'),
-            unittest.mock.call('myGranule', 'myBucket', 'AUX_RESORB'),
-        ])
+        mock_get_orbit_for_granule.assert_has_calls(
+            [
+                unittest.mock.call('myGranule', 'myBucket', 'AUX_POEORB'),
+                unittest.mock.call('myGranule', 'myBucket', 'AUX_RESORB'),
+            ]
+        )
 
     with unittest.mock.patch('api.get_orbit_for_granule') as mock_get_orbit_for_granule:
         mock_get_orbit_for_granule.return_value = 'foo'
@@ -145,10 +149,12 @@ def test_get_url():
         mock_get_orbit_for_granule.side_effect = [None, 'bar']
         assert api.get_url(granule='myGranule', bucket='myBucket') == 'https://myBucket.s3.amazonaws.com/bar'
         assert mock_get_orbit_for_granule.call_count == 2
-        mock_get_orbit_for_granule.assert_has_calls([
-            unittest.mock.call('myGranule', 'myBucket', 'AUX_POEORB'),
-            unittest.mock.call('myGranule', 'myBucket', 'AUX_RESORB'),
-        ])
+        mock_get_orbit_for_granule.assert_has_calls(
+            [
+                unittest.mock.call('myGranule', 'myBucket', 'AUX_POEORB'),
+                unittest.mock.call('myGranule', 'myBucket', 'AUX_RESORB'),
+            ]
+        )
 
 
 def test_get_orbit(monkeypatch):

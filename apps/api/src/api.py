@@ -5,6 +5,7 @@ import cachetools
 from connexion import AsyncApp
 from mangum import Mangum
 
+
 app = AsyncApp(__name__)
 app.add_api('openapi.yml')
 lambda_handler = Mangum(app)
