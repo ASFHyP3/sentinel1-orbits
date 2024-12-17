@@ -1,6 +1,11 @@
+[project]
+requires-python = "==3.12"
+
 [tool.ruff]
 line-length = 120
-src = ["apps/api/src", "apps/fetcher/src", "tests"]
+# The directories to consider when resolving first- vs. third-party imports.
+# See: https://docs.astral.sh/ruff/settings/#src
+src = ["**/src", "tests"]
 
 [tool.ruff.format]
 indent-style = "space"
