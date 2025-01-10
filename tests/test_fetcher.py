@@ -98,7 +98,7 @@ def test_get_cdse_orbits_empty_response():
         'maxRecords': 1000,
         'page': 1,
     }
-    response_payload = {'features': []}
+    response_payload: dict = {'features': []}
     responses.get(
         url=url,
         match=[responses.matchers.query_param_matcher(params)],

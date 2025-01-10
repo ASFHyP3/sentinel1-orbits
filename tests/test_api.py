@@ -14,7 +14,7 @@ def s3_stubber():
 
 
 def test_lambda_handler():
-    event = {
+    event: dict = {
         'version': '2.0',
         'requestContext': {
             'http': {
@@ -24,7 +24,7 @@ def test_lambda_handler():
             },
         },
     }
-    assert api.lambda_handler(event, None) == {
+    assert api.lambda_handler(event, None) == {  # type: ignore[arg-type]
         'body': '',
         'headers': {'content-length': '0', 'content-type': 'application/json', 'location': '/ui/'},
         'isBase64Encoded': False,
@@ -32,13 +32,13 @@ def test_lambda_handler():
     }
 
     event['requestContext']['http']['path'] = '/ui/'
-    assert api.lambda_handler(event, None)['statusCode'] == 200
+    assert api.lambda_handler(event, None)['statusCode'] == 200  # type: ignore[arg-type]
 
     event['requestContext']['http']['path'] = '/foo'
-    assert api.lambda_handler(event, None)['statusCode'] == 404
+    assert api.lambda_handler(event, None)['statusCode'] == 404  # type: ignore[arg-type]
 
     event['requestContext']['http']['path'] = '/scene/foo'
-    assert api.lambda_handler(event, None)['statusCode'] == 400
+    assert api.lambda_handler(event, None)['statusCode'] == 400  # type: ignore[arg-type]
 
 
 def test_build_url():

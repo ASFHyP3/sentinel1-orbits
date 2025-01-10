@@ -24,7 +24,7 @@ class EsaToken:
         """
         self.username = username
         self.password = password
-        self.token = None
+        self.token: str | None = None
         self.session_id = None
 
     def __enter__(self) -> str:
@@ -38,6 +38,7 @@ class EsaToken:
         response.raise_for_status()
         self.session_id = response.json()['session_state']
         self.token = response.json()['access_token']
+        assert self.token is not None
         return self.token
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -63,15 +64,14 @@ def get_s3_orbits(bucket_name: str, prefix: str) -> set[str]:
 
 def get_cdse_orbits(orbit_type: str) -> list[dict]:
     url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel1/search.json'
-    cdse_orbits = []
+    cdse_orbits: list[dict] = []
 
-    params = {
+    params: dict = {
         'productType': orbit_type,
         'maxRecords': 1000,
         'page': 1,
     }
-    items = True
-    while items:
+    while True:
         response = session.get(url, params=params)
         response.raise_for_status()
         items = [
@@ -81,6 +81,8 @@ def get_cdse_orbits(orbit_type: str) -> list[dict]:
             }
             for feature in response.json()['features']
         ]
+        if not items:
+            break
         cdse_orbits.extend(items)
         params['page'] += 1
     return cdse_orbits
