@@ -6,9 +6,8 @@ dependencies:
   - python=3.12
   - pip
   - pytest
-  - ruff
-  - mypy
   - responses
   - pip:
+      - -r requirements-static.txt
       - -r requirements-api.txt
       - -r requirements-fetcher.txt
