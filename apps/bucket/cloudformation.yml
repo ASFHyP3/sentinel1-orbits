@@ -38,9 +38,7 @@ Resources:
               aws:SourceArn: !Sub arn:aws:s3:::${BucketName}
         - Sid: allowOnlySQSandLambdaSubscription
           Effect: Allow
-          Action:
-            - sns:Subscribe
-            - sns:Receive
+          Action: sns:Subscribe
           Resource: !Ref SNSTopic
           Principal:
             AWS: "*"
