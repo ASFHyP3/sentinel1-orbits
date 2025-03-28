@@ -18,5 +18,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.4
-      - uses: scottbrenner/cfn-lint-action@v2.4.8
+      - uses: scottbrenner/cfn-lint-action@v2.4.9
       - run: cfn-lint --info --ignore-checks W3002 --template `find . -name cloudformation.yml`
