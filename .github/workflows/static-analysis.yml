@@ -5,18 +5,18 @@ on: push
 jobs:
   call-secrets-analysis-workflow:
     # Docs: https://github.com/ASFHyP3/actions
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.14.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.17.1
 
   call-ruff-workflow:
     # Docs: https://github.com/ASFHyP3/actions
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.14.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.17.1
 
   call-mypy-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.14.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.17.1
 
   cfn-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.4
-      - uses: scottbrenner/cfn-lint-action@v2.4.6
+      - uses: scottbrenner/cfn-lint-action@v2.4.9
       - run: cfn-lint --info --ignore-checks W3002 --template `find . -name cloudformation.yml`
