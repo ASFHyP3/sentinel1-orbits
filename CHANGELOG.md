@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/)
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5]
+
+### Fixed
+- Switch to new OData API following the [decommissioning of the OpenSearch Catalogue API](https://dataspace.copernicus.eu/news/2026-1-20-opensearch-catalogue-api-new-date-api-decommissioning).
+
 ## [0.1.4]
 
 ### Added
