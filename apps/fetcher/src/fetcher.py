@@ -76,8 +76,10 @@ def get_cdse_orbits(orbit_type: str) -> list[dict]:
     cdse_orbits: list[dict] = []
 
     while url:
-        orbits = requests.get(url).json()
-        cdse_orbits.extend({'filename': feature['Name'], 'id': feature['Id']} for feature in orbits['value'])
+        response = session.get(url)
+        response.raise_for_status()
+        orbits = response.json()['value']
+        cdse_orbits.extend({'filename': feature['Name'], 'id': feature['Id']} for feature in orbits)
         url = orbits.get('@odata.nextLink')
 
     return cdse_orbits
@@ -112,5 +114,5 @@ def lambda_handler(event: dict, context):
 
     with EsaToken(username=credentials['username'], password=credentials['password']) as token:
         for orbit in orbits_to_copy:
-            print(f'Fetching {orbit["filename"]}')
+            print(f'Copying {orbit["filename"]}')
             copy_file(orbit['filename'], orbit['id'], token, bucket_name, orbit_type)
