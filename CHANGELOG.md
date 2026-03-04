@@ -9,7 +9,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.6]
 
 ### Fixed
-- Restor use of session in `fetch.py`
+- Restore use of session in `fetch.py`
 
 ## [0.1.5]
 
