@@ -112,5 +112,5 @@ def lambda_handler(event: dict, context):
 
     with EsaToken(username=credentials['username'], password=credentials['password']) as token:
         for orbit in orbits_to_copy:
-            print(f'Copying {orbit["filename"]}')
+            print(f'Fetching {orbit["filename"]}')
             copy_file(orbit['filename'], orbit['id'], token, bucket_name, orbit_type)
