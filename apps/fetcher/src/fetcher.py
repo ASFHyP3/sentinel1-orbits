@@ -65,12 +65,10 @@ def get_s3_orbits(bucket_name: str, prefix: str) -> set[str]:
 def get_cdse_orbits(orbit_type: str) -> list[dict]:
     # https://documentation.dataspace.copernicus.eu/APIs/OData.html
     base_url = 'https://catalogue.dataspace.copernicus.eu/odata/v1/Products'
-
     orbit_filter = (
         f"(Attributes/OData.CSC.StringAttribute/any(i0:i0/Name eq 'productType' and i0/Value eq '{orbit_type}'))"
         " and (Collection/Name eq 'SENTINEL-1')"
     )
-
     url = f'{base_url}?$filter=({orbit_filter})&$top=1000'
 
     cdse_orbits: list[dict] = []
