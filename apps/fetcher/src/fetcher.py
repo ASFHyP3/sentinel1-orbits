@@ -77,9 +77,8 @@ def get_cdse_orbits(orbit_type: str) -> list[dict]:
 
     while url:
         orbits = requests.get(url).json()
-        url = orbits.get('@odata.nextLink')
-
         cdse_orbits.extend({'filename': feature['Name'], 'id': feature['Id']} for feature in orbits['value'])
+        url = orbits.get('@odata.nextLink')
 
     return cdse_orbits
 
