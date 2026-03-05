@@ -1,5 +1,6 @@
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 import boto3
 import requests
@@ -63,22 +64,30 @@ def get_s3_orbits(bucket_name: str, prefix: str) -> set[str]:
 
 
 def get_cdse_orbits(orbit_type: str) -> list[dict]:
-    # https://documentation.dataspace.copernicus.eu/APIs/OData.html
-    base_url = 'https://catalogue.dataspace.copernicus.eu/odata/v1/Products'
-    orbit_filter = (
-        f"(Attributes/OData.CSC.StringAttribute/any(i0:i0/Name eq 'productType' and i0/Value eq '{orbit_type}'))"
-        " and (Collection/Name eq 'SENTINEL-1')"
-    )
-    url = f'{base_url}?$filter=({orbit_filter})&$top=1000'
+    def build_url(skip: int) -> str:
+        # https://documentation.dataspace.copernicus.eu/APIs/OData.html
+        base_url = 'https://catalogue.dataspace.copernicus.eu/odata/v1/Products'
+        orbit_filter = (
+            f"(Attributes/OData.CSC.StringAttribute/any(i0:i0/Name eq 'productType' and i0/Value eq '{orbit_type}'))"
+            " and (Collection/Name eq 'SENTINEL-1')"
+        )
+        url = f'{base_url}?$filter=({orbit_filter})&$top=1000&$skip={skip}'
+        return url
 
-    cdse_orbits: list[dict] = []
-
-    while url:
+    def make_cdse_request(skip: int) -> list[dict]:
+        url = build_url(skip)
         response = session.get(url)
         response.raise_for_status()
         orbits = response.json()
-        cdse_orbits.extend({'filename': feature['Name'], 'id': feature['Id']} for feature in orbits['value'])
-        url = orbits.get('@odata.nextLink')
+
+        return [{'filename': feature['Name'], 'id': feature['Id']} for feature in orbits['value']]
+
+    skips = [x * 1000 for x in range(11)]
+
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        orbit_lists = list(executor.map(make_cdse_request, skips))
+
+    cdse_orbits: list[dict] = sum(orbit_lists, [])
 
     return cdse_orbits
 
