@@ -2,6 +2,8 @@
 
 Applications supporting the [Sentinel-1 Precise Orbit Determination (POD) products](https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel1.html#sentinel-1-precise-orbit-determination-pod-products) dataset in the [Registry of Open Data](https://registry.opendata.aws/s1-orbits/) on AWS.
 
+A readme describing the orbit products can be found here: https://s1-orbits.s3.us-west-2.amazonaws.com/README.html
+
 ## Deployments
 
 | Environment | URL |

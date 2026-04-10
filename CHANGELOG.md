@@ -9,6 +9,11 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.7]
 
 ### Added
+- Update readme
+
+## [0.1.7]
+
+### Added
 - API support for Sentinel-1D scenes
 
 ## [0.1.6]
