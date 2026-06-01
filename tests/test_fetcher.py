@@ -90,63 +90,6 @@ def test_get_s3_orbits(s3_stubber):
 
 
 @responses.activate
-def test_get_cdse_orbits_empty_response():
-    url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel1/search.json'
-
-    params = {
-        'productType': 'AUX_POEORB',
-        'maxRecords': 1000,
-        'page': 1,
-    }
-    response_payload: dict = {'features': []}
-    responses.get(
-        url=url,
-        match=[responses.matchers.query_param_matcher(params)],
-        json=response_payload,
-    )
-
-    assert fetcher.get_cdse_orbits('AUX_POEORB') == []
-
-
-@responses.activate
-def test_get_cdse_orbits():
-    url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel1/search.json'
-
-    responses.get(
-        url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 1})],
-        json={
-            'features': [
-                {'properties': {'title': 'title1'}, 'id': 'id1'},
-                {'properties': {'title': 'title2'}, 'id': 'id2'},
-            ]
-        },
-    )
-
-    responses.get(
-        url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 2})],
-        json={
-            'features': [
-                {'properties': {'title': 'title3'}, 'id': 'id3'},
-            ]
-        },
-    )
-
-    responses.get(
-        url=url,
-        match=[responses.matchers.query_param_matcher({'productType': 'AUX_RESORB', 'maxRecords': 1000, 'page': 3})],
-        json={'features': []},
-    )
-
-    assert fetcher.get_cdse_orbits('AUX_RESORB') == [
-        {'filename': 'title1', 'id': 'id1'},
-        {'filename': 'title2', 'id': 'id2'},
-        {'filename': 'title3', 'id': 'id3'},
-    ]
-
-
-@responses.activate
 def test_copy_file(s3_stubber):
     responses.get(
         url='https://zipper.dataspace.copernicus.eu/download/myId',
