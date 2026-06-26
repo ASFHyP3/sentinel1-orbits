@@ -39,7 +39,7 @@ runs:
   using: composite
   steps:
 
-    - uses: aws-actions/configure-aws-credentials@v4
+    - uses: aws-actions/configure-aws-credentials@v6
       with:
         aws-access-key-id: ${{ inputs.OPENDATA_AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ inputs.OPENDATA_AWS_SECRET_ACCESS_KEY }}
@@ -60,13 +60,13 @@ runs:
               BucketName='${{ inputs.BUCKET_NAME }}' \
               AwsApplicationAccountId='${{ inputs.AWS_APPLICATION_ACCOUNT_ID }}'
 
-    - uses: aws-actions/configure-aws-credentials@v4
+    - uses: aws-actions/configure-aws-credentials@v6
       with:
         aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: 3.12
 
