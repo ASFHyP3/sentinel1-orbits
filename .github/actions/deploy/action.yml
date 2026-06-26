@@ -2,9 +2,7 @@ name: Deploy to AWS
 description: Deploys the OpenData bucket stack, and the seperate application stack, to AWS via CloudFormation
 
 inputs:
-  AWS_ACCESS_KEY_ID:
-    required: true
-  AWS_SECRET_ACCESS_KEY:
+  AWS_ROLE_ARN:
     required: true
   CLOUDFORMATION_ROLE_ARN:
     required: true
@@ -12,9 +10,7 @@ inputs:
     required: true
   AWS_APPLICATION_ACCOUNT_ID:
     required: true
-  OPENDATA_AWS_ACCESS_KEY_ID:
-    required: true
-  OPENDATA_AWS_SECRET_ACCESS_KEY:
+  OPENDATA_AWS_ROLE_ARN:
     required: true
   OPENDATA_CLOUDFORMATION_ROLE_ARN:
     required: true
@@ -41,8 +37,7 @@ runs:
 
     - uses: aws-actions/configure-aws-credentials@v6
       with:
-        aws-access-key-id: ${{ inputs.OPENDATA_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ inputs.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ inputs.OPENDATA_AWS_ROLE_ARN }}
         aws-region: us-west-2
 
     - name: package and deploy the bucket stack
@@ -62,8 +57,7 @@ runs:
 
     - uses: aws-actions/configure-aws-credentials@v6
       with:
-        aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ inputs.AWS_ROLE_ARN }}
         aws-region: us-west-2
 
     - uses: actions/setup-python@v6

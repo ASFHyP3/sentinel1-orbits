@@ -24,12 +24,22 @@ Resources:
                   - sns:*
                 Resource: "*"
 
-  GithubActionsUser:
-    Type: AWS::IAM::User
+  OIDCRole:
+    Type: AWS::IAM::Role
     Properties:
-      UserName: github-actions
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: repo:ASFHyP3/sentinel1-orbits:environment:prod
       Policies:
-        - PolicyName: github-actions-user-policy
+        - PolicyName: github-actions-oidc-policy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
