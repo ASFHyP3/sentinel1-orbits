@@ -3,6 +3,14 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Deploys IAM resources supporting automated deployments of the bucket stack in the Open Data account
 
 Resources:
+
+  GitHubActionsOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      ClientIdList:
+        - sts.amazonaws.com
+      Url: https://token.actions.githubusercontent.com
+
   CloudformationDeploymentRole:
     Type: AWS::IAM::Role
     Properties:
