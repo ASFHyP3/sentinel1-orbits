@@ -42,7 +42,7 @@ jobs:
         with:
           AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-          OPENDATA_AWS_ROLE_ARN: ${{ secrets.OPENDATA_AWS_ROLE_ARN }}
+          OPENDATA_AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
           OPENDATA_CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
           AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
