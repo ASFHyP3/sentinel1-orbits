@@ -23,6 +23,10 @@ on:
         description: The domain name for the API.
         default: s1-orbits-test.asf.alaska.edu
 
+permissions:
+  contents: read
+  id-token: write
+
 concurrency: deploy-test
 
 jobs:
