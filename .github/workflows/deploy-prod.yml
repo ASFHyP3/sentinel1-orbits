@@ -36,11 +36,9 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/deploy
         with:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
           CLOUDFORMATION_ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-          OPENDATA_AWS_ACCESS_KEY_ID: ${{ secrets.OPENDATA_AWS_ACCESS_KEY_ID }}
-          OPENDATA_AWS_SECRET_ACCESS_KEY: ${{ secrets.OPENDATA_AWS_SECRET_ACCESS_KEY }}
+          OPENDATA_AWS_ROLE_ARN: ${{ secrets.OPENDATA_AWS_ROLE_ARN }}
           OPENDATA_CLOUDFORMATION_ROLE_ARN: ${{ secrets.OPENDATA_CLOUDFORMATION_ROLE_ARN }}
           AWS_APPLICATION_ACCOUNT_ID: ${{ secrets.AWS_APPLICATION_ACCOUNT_ID }}
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
